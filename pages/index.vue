@@ -273,15 +273,19 @@
   </div>
 
 </template>
-
 <script>
 import guide from "@/components/guide.vue";
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
  import * as THREE from "three";
+
+  // const dat = require('dat.gui');
   import {OrbitControls} from '../assets/js/OrbitControls.js';
   import {FBXLoader} from '../assets/js/FBXLoader.js';
   import {Reflector} from '../static/threejs/examples/jsm/objects/Reflector.js';
+  import Stats from '../static/threejs/examples/jsm/libs/stats.module';
     const clock = new THREE.Clock();
+    let guiParams = null;
+    // const gui = new dat.GUI();
 export default {
   name: "IndexPage",
   layout: "BaseLayout",
@@ -576,14 +580,24 @@ export default {
       this.hover5 = false;
     },
     init() {
+      if (process.client) {
+        this.dat = require('dat.gui');
+      }
+    //GUI
+        guiParams = new function() {
+          this.rotationSpeed = 0.02;
+          this.positionX = 70;
+          this.positionY = 90;
+          this.positionZ = 0;
+        }
+        // const dat = require('dat.gui');
         const container = document.getElementById('three-container');
         document.addEventListener('mousemove',this.onMouseover)
         this.camera = new THREE.PerspectiveCamera(45, container.innerWidth / container.innerHeight, 0.5, 500);
         this.camera.position.set(0, 150, 300);
         this.scene = new THREE.Scene();
         // this.scene.add(new THREE.AxesHelper(500))
-        this.scene.position.set(80, 85, -10);
-
+        this.scene.position.set(guiParams.positionX, guiParams.positionY, guiParams.positionZ);
         const blueLight = new THREE.PointLight(0x7f7fff, 0.25, 1000);
         blueLight.position.set(0, 50, 550);
         this.scene.add(blueLight);
@@ -596,6 +610,11 @@ export default {
         dirLight.shadow.camera.right = 120;
         this.scene.add(dirLight);
 
+    
+        const gui = new this.dat.GUI();
+        gui.add(guiParams, 'positionX', 0, 500);
+        gui.add(guiParams, 'positionY', 0, 500);
+        gui.add(guiParams, 'positionZ', 0, 500);
 
 
         //创建圆形水平镜面，用于将胶囊体、甜圈圈、多面体小球映射到地面上
@@ -643,8 +662,8 @@ export default {
         window.addEventListener('resize', this.onWindowResize());
 
         // stats
-        // this.stats = new Stats();
-        // container.appendChild(this.stats.dom);
+        this.stats = new Stats();
+        container.appendChild(this.stats.dom);
 
       },
     onWindowResize() {
@@ -654,11 +673,12 @@ export default {
       },
       animate() {
         requestAnimationFrame(this.animate);
-
         const delta = clock.getDelta();
         if (this.mixer) this.mixer.update(delta);
+        this.scene.position.set(guiParams.positionX, guiParams.positionY, guiParams.positionZ);
+
         this.renderer.render(this.scene, this.camera);
-        // this.stats.update();
+        this.stats.update();
       },
       onMouseover(event){
         this.scene.rotation.y = (event.clientX - 600) / 5000;
@@ -667,6 +687,8 @@ export default {
   },
   data() {
     return {
+      dat: null,
+      rotationSpeed: 0,
       topFov: 1200,
       pivot5: null,
       pivot6: null,
@@ -712,8 +734,12 @@ export default {
       scene: null,
       // 渲染器对象
       renderer: null,
+      Stats: null,
       // 材质对象
       mesh: null,
+      positionX: 0,
+      positionY: 0,
+      positionZ: 0,
       controls: null,
       topdiv2: true,
       hover1: false,
