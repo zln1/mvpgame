@@ -277,15 +277,20 @@
 import guide from "@/components/guide.vue";
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
  import * as THREE from "three";
-
-  // const dat = require('dat.gui');
   import {OrbitControls} from '../assets/js/OrbitControls.js';
   import {FBXLoader} from '../assets/js/FBXLoader.js';
   import {Reflector} from '../static/threejs/examples/jsm/objects/Reflector.js';
   import Stats from '../static/threejs/examples/jsm/libs/stats.module';
-    const clock = new THREE.Clock();
-    let guiParams = null;
-    // const gui = new dat.GUI();
+  const clock = new THREE.Clock();
+  let guiParams = null;
+// 模型参数 
+let modelInfo = {
+  position: {
+    x: 70,
+    y: 90,
+    z: 0
+  }
+}
 export default {
   name: "IndexPage",
   layout: "BaseLayout",
@@ -586,9 +591,9 @@ export default {
     //GUI
         guiParams = new function() {
           this.rotationSpeed = 0.02;
-          this.positionX = 70;
-          this.positionY = 90;
-          this.positionZ = 0;
+          this.positionX = modelInfo.position.x;
+          this.positionY = modelInfo.position.y;
+          this.positionZ = modelInfo.position.z;
         }
         // const dat = require('dat.gui');
         const container = document.getElementById('three-container');
