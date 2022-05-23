@@ -30,7 +30,7 @@
     <guide v-if="camera.fov < 10"></guide>
     <div style="height: 800px">
     </div>
-    <!-- <div class="index-content">
+    <div class="index-content">
       <div class="topdiv3">
         <transition name="Fade">
           <div v-if="istitle1" class="title1" style="margin-bottom: 70px">
@@ -269,7 +269,7 @@
           <div class="swiper-button-next"></div>
         </div>
       </div>
-    </div> -->
+    </div>
   </div>
 
 </template>
