@@ -1,0 +1,52 @@
+<html {{ HTML_ATTRS }}>
+<head {{ HEAD_ATTRS }}>
+  {{ HEAD }}
+  <style>
+    ::-webkit-scrollbar {
+  display: none; /* Chrome Safari */}
+    canvas {
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: -99;
+    }
+  </style>
+</head>
+<body {{ BODY_ATTRS }} style="background-color: #000;">
+<div id="body-box" style="position: fixed;height: 100vh;width: 100%;top: 0;left: 0;overflow: auto">
+  {{ APP }}
+</div>
+<!--<canvas id="canvas"></canvas>-->
+<div class="v-preloader" id="preloader" style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background-color: #000;
+    ">
+</div>
+<div class="page" id="page" style="display: none">
+  <header class="header"></header>
+  <div class="app" id="app"
+       data-v-page="home-page"
+       data-v-pageAjax-name="home-page"
+  >
+    <div class="custom-scroll home-page" id="custom-scroll">
+      <div class="v-scroll__container">
+        <div class="custom-scroll__outer"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Canvas -->
+<div class="canvas-outer beneath" data-splash-bg-outer>
+  <splash-bg></splash-bg>
+</div>
+<div class="canvas-outer" style="display: none;" id="three-js"></div>
+</body>
+
+</html>
