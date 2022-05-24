@@ -386,7 +386,6 @@ export default {
       // -45 /700x + 45 = y
       // this.transformImg();
       this.bodyScrllTop = document.getElementById("body-box").scrollTop;
-      console.log(this.bodyScrllTop,this.camera.fov);
       if(this.bodyScrllTop <= this.topFov) {
           this.camera.fov = 45 - (45 / 1200) * this.bodyScrllTop
           this.camera.updateProjectionMatrix();
@@ -603,18 +602,24 @@ export default {
         this.scene = new THREE.Scene();
         // this.scene.add(new THREE.AxesHelper(500))
         this.scene.position.set(guiParams.positionX, guiParams.positionY, guiParams.positionZ);
-        const blueLight = new THREE.PointLight(0x7f7fff, 0.25, 1000);
-        blueLight.position.set(0, 50, 550);
+
+        const blueLight = new THREE.PointLight(0xffffff);
+        blueLight.position.set(-150, -25, 20);
         this.scene.add(blueLight);
+         // PointLightHelper( light：点光, sphereSize:点光对象的大小, color：颜色 )
+            var sphereSize = 10;
+            var pointLightHelper = new THREE.PointLightHelper(blueLight, sphereSize);
+            // this.scene.add(pointLightHelper);
         const dirLight = new THREE.DirectionalLight(0xffffff);
-        dirLight.position.set(20, 200, 100);
+        dirLight.position.set(-150, -25, 20);
         dirLight.castShadow = true;
         dirLight.shadow.camera.top = 180;
         dirLight.shadow.camera.bottom = -100;
         dirLight.shadow.camera.left = -120;
         dirLight.shadow.camera.right = 120;
         this.scene.add(dirLight);
-
+        var ambient = new THREE.AmbientLight(0xffffff, 0.5);
+        this.scene.add(ambient);
     
         const gui = new this.dat.GUI();
         gui.add(guiParams, 'positionX', 0, 500);
@@ -630,8 +635,10 @@ export default {
           textureHeight: window.innerHeight * window.devicePixelRatio,
           color: 0x777777
         });
+        groundMirror.renderOrder = -999;
         groundMirror.position.y = -29;
         groundMirror.rotateX(-Math.PI / 2);
+        console.log('groundMirror>>', groundMirror);
         this.scene.add(groundMirror);
        
         let that = this
@@ -639,8 +646,9 @@ export default {
         this.pivot5 = new THREE.Object3D();
         const loader = new FBXLoader();
         loader.load('/home.fbx', function (obj) {
-          // console.log(obj.children);
-          
+          const m1 = obj.children[2].children[0].children[0].material[1];
+          m1.side = 2;
+          // m1.emissive = m1.color;
           // obj.children[2].children[0].material[0].color = new THREE.Color("#9932CC")
            obj.scale.set(that.scale, that.scale, that.scale); //放大obj组对象
                 // obj.rotateY(-(90 * 3.14) / 90);
@@ -668,7 +676,7 @@ export default {
 
         // stats
         this.stats = new Stats();
-        container.appendChild(this.stats.dom);
+        // container.appendChild(this.stats.dom);
 
       },
     onWindowResize() {
