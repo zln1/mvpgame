@@ -1,7 +1,7 @@
 <template>
   <div class="index-home">
     <div class="index-content" style="position: relative">
-      <div id="three-container"></div>
+      <!-- <div id="three-container"></div> -->
       <!-- <div :style="transformBoxStyle" class="transform-banner">
         <img :style="transformImgStyle" src="~@/assets/test.webp" alt=""/>
       </div> -->
@@ -283,7 +283,7 @@ import { Swiper, SwiperSlide } from "vue-awesome-swiper";
   import Stats from '../static/threejs/examples/jsm/libs/stats.module';
   const clock = new THREE.Clock();
   let guiParams = null;
-// 模型参数 
+// 模型参数
 let modelInfo = {
   position: {
     x: 70,
@@ -391,7 +391,7 @@ export default {
           this.camera.updateProjectionMatrix();
           this.renderer.render(this.scene, this.camera);
       }
-  
+
 
       // if (this.bodyScrllTop > 1450 && this.istranformopcity) {
       //   this.istitle1 = true;
@@ -620,7 +620,7 @@ export default {
         this.scene.add(dirLight);
         var ambient = new THREE.AmbientLight(0xffffff, 0.5);
         this.scene.add(ambient);
-    
+
         const gui = new this.dat.GUI();
         gui.add(guiParams, 'positionX', 0, 500);
         gui.add(guiParams, 'positionY', 0, 500);
@@ -628,19 +628,22 @@ export default {
 
 
         //创建圆形水平镜面，用于将胶囊体、甜圈圈、多面体小球映射到地面上
-        let geometry = new THREE.CircleGeometry(130, 130);
+        let geometry = new THREE.PlaneGeometry(120, 70);
         let groundMirror = new Reflector(geometry, {
           clipBias: 0.003,
           textureWidth: window.innerWidth * window.devicePixelRatio,
           textureHeight: window.innerHeight * window.devicePixelRatio,
           color: 0x777777
         });
-        groundMirror.renderOrder = -999;
+        // groundMirror.material.transparent=true;
+        // groundMirror.material.opacity = 0;//透明度
         groundMirror.position.y = -29;
+        groundMirror.position.x = -50;
+        groundMirror.position.z = 70;
         groundMirror.rotateX(-Math.PI / 2);
         console.log('groundMirror>>', groundMirror);
         this.scene.add(groundMirror);
-       
+
         let that = this
         // model
         this.pivot5 = new THREE.Object3D();
@@ -1371,7 +1374,7 @@ export default {
 .index-content .topdiv .text {
       // width: 948px;
       margin-top: 43vh;
-} 
+}
 }
 
 // }
